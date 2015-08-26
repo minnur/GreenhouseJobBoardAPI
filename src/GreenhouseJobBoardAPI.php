@@ -69,7 +69,7 @@ interface InterfaceGreenhouseJobBoardAPI {
   /**
    * Post request to Greenhouse API (Submit application form).
    */
-  public function submitApplication($job_id, Array $data = []);
+  public function submitApplication(Array $data = []);
 
 }
 
