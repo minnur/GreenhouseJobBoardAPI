@@ -29,7 +29,7 @@ $api_url = "https://api.greenhouse.io/v1/boards/{{CLIENT_CODE}}/embed/";
 $greenhouse = new GreenhouseJobBoardAPI($api_url);
 ```
 
-##### Methods
+##### GET Methods
 
 ```php
 // The method returns a list of all of your organization's
@@ -62,3 +62,11 @@ $board = $greenhouse->getBoard();
 ```
 
 See also `examples/example.php` for working examples.
+
+##### POST Job Application
+
+method already exists, need to provide examples.
+
+```php
+@todo
+```
