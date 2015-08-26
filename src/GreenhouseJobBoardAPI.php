@@ -79,7 +79,7 @@ interface InterfaceGreenhouseJobBoardAPI {
 class GreenhouseJobBoardAPI implements InterfaceGreenhouseJobBoardAPI {
 
   /** @var (const) GreenhouseJobBoardAPI version */
-  const VERSION = '0.0.3';
+  const VERSION = '0.0.1';
 
   /** @var (const) CRLF */
   const EOL = "\r\n";
