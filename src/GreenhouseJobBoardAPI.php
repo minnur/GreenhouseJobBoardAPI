@@ -79,7 +79,7 @@ interface InterfaceGreenhouseJobBoardAPI {
 class GreenhouseJobBoardAPI implements InterfaceGreenhouseJobBoardAPI {
 
   /** @var (const) GreenhouseJobBoardAPI version */
-  const VERSION = '0.0.1';
+  const VERSION = '0.0.2';
 
   /** @var (const) CRLF */
   const EOL = "\r\n";
@@ -269,7 +269,10 @@ class GreenhouseJobBoardAPI implements InterfaceGreenhouseJobBoardAPI {
   public function submitApplication(Array $data = []) {
     $multiparts = [];
     $url_components = parse_url($this->api_url);
-    $endpoint = $url_components['scheme'] . '://' . $url_components['host'] . '/v1/applications/';
+    if (empty($this->api_key)) {
+      throw new \Exception('API Key required to submit application forms.');
+    }
+    $endpoint = $url_components['scheme'] . '://' . $this->api_key . '@' . $url_components['host'] . '/v1/applications/';
     if (count($data)) {
 
       foreach ($data as $key => $value) {
