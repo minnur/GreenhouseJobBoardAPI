@@ -35,14 +35,86 @@ else {
 
 $form = [];
 
-foreach ($fields as $field) {
-  $required = !empty($field['required']) ? $field['required'] : FALSE;
-  $label = !empty($field['label']) ? $field['label'] : '';
-  $elements = !empty($field['fields']) ? $field['fields'] : [];
-  $type = !empty($field['type']) ? $field['type'] : '';
+foreach ($fields as $index => $field) {
+  $required = !empty($field->required) ? $field->required : FALSE;
+  $label = !empty($field->label) ? $field->label : '';
+  $elements = !empty($field->fields) ? $field->fields : [];
+  $type = !empty($field->type) ? $field->type : '';
+  $eeoc_description = !empty($field->description) ? $field->description : '';
   if ($type == 'eeoc') {
-    switch () {
+   if (!empty($field->questions)) {
 
+   $form['desciption_' . $index] = [
+     'type'  => 'markup',
+     'value' => $eeoc_description,
+   ];
+
+      foreach ($field->questions as $eeoc_field) {
+        $required = !empty($eeoc_field->required) ? $eeoc_field->required : FALSE;
+        $label = !empty($eeoc_field->label) ? $eeoc_field->label : '';
+        $eeoc_elements = !empty($eeoc_field->fields) ? $eeoc_field->fields : [];
+        foreach ($eeoc_elements as $element) {
+
+          // Options for `select` and `checkboxes|radios` options.
+          $options = [];
+          if (!empty($element->values)) {
+            foreach ($element->values as $option) {
+              $options[$option->value] = $option->label;
+            }
+          }
+
+          switch ($element->type) {
+
+            // Respresent with an input of type file.
+            case 'input_file' :
+              $form[] = [
+                'name'  => $element->name,
+                'label' => $label,
+                'type'  => 'file',
+              ];
+              break;
+
+            // Respresent with an input of type text.
+            case 'input_text' :
+              $form[] = [
+                'name'  => $element->name,
+                'label' => $label,
+                'type'  => 'text',
+              ];
+              break;
+
+            // Respresent with a textarea.
+            case 'textarea' :
+              $form[] = [
+                'name'  => $element->name,
+                'label' => $label,
+                'type'  => 'textarea',
+              ];
+              break;
+
+            // Can be represented as either a set of radio buttons or a select.
+            case 'multi_value_single_select' :
+              $form[] = [
+                'name'    => $element->name,
+                'label'   => $label,
+                'type'    => 'select',
+                'options' => $options,
+              ];
+              break;
+
+            // Can be represented as either a set of checkboxes or a multi-select.
+            case 'multi_value_multi_select' :
+              $form[] = [
+                'name'    => $element->name,
+                'label'   => $label,
+                'type'    => 'checkboxes',
+                'options' => $options,
+              ];
+              break;
+
+          }
+        }
+      }
     }
   }
   else {
@@ -50,17 +122,18 @@ foreach ($fields as $field) {
 
       // Options for `select` and `checkboxes|radios` options.
       $options = [];
-      if (!empty($element['values'])) {
-      	foreach ($element['values'] as $option) {
+      if (!empty($element->values)) {
+        foreach ($element->values as $option) {
           $options[$option->value] = $option->label;
-      	}
+        }
       }
 
-      switch ($element['type']) {
+      switch ($element->type) {
 
         // Respresent with an input of type file.
         case 'input_file' :
-          $form[$element['name']] = [
+          $form[] = [
+            'name'  => $element->name,
             'label' => $label,
             'type'  => 'file',
           ];
@@ -68,7 +141,8 @@ foreach ($fields as $field) {
 
         // Respresent with an input of type text.
         case 'input_text' :
-          $form[$element['name']] = [
+          $form[] = [
+            'name'  => $element->name,
             'label' => $label,
             'type'  => 'text',
           ];
@@ -76,7 +150,8 @@ foreach ($fields as $field) {
 
         // Respresent with a textarea.
         case 'textarea' :
-          $form[$element['name']] = [
+          $form[] = [
+            'name'  => $element->name,
             'label' => $label,
             'type'  => 'textarea',
           ];
@@ -84,7 +159,8 @@ foreach ($fields as $field) {
 
         // Can be represented as either a set of radio buttons or a select.
         case 'multi_value_single_select' :
-          $form[$element['name']] = [
+          $form[] = [
+            'name'    => $element->name,
             'label'   => $label,
             'type'    => 'select',
             'options' => $options,
@@ -93,7 +169,8 @@ foreach ($fields as $field) {
 
         // Can be represented as either a set of checkboxes or a multi-select.
         case 'multi_value_multi_select' :
-          $form[$element['name']] = [
+          $form[] = [
+            'name'    => $element->name,
             'label'   => $label,
             'type'    => 'checkboxes',
             'options' => $options,
@@ -106,3 +183,36 @@ foreach ($fields as $field) {
 }
 
 $greenhouse->submitApplication($post_data);
+
+?>
+<form method="post" enctype="multipart/form-data">
+ <?php foreach ($form as $element) : ?>
+    <div class="form-item">
+     <label><?php echo $element['label']; ?></label>
+     <div class="element">
+        <?php if ($element['type'] == 'text' || $element['type'] == 'file') : ?>
+          <input type="<?php print $element['type']; ?>" name="<?php print $element['name']; ?>">
+        <?php elseif ($element['type'] == 'select') : ?>
+          <select name="<?php print $element['name']; ?>">
+           <?php foreach ($element['options'] as $key => $val) : ?>
+             <option value="<?php print $key; ?>"><?php print $val; ?></option>
+            <?php endforeach; ?>
+          </select>
+        <?php elseif ($element['type'] == 'checkboxes') : ?>
+         <?php foreach ($element['options'] as $key => $val) : ?>
+           <div class="checkbox-item"><input type="checkbox" name="<?php print $element['name']; ?>" value="<?php print $key; ?>"><?php print $val; ?></div>
+          <?php endforeach; ?>
+        <?php elseif ($element['type'] == 'textarea') : ?>
+          <textarea name="<?php print $element['name']; ?>"></textarea>
+        <?php elseif ($element['type'] == 'markup') : ?>
+          <div class="markup">
+           <?php print $element['value']; ?>
+          </div>
+        <?php endif; ?>
+     </div>
+    </div>
+ <?php endforeach; ?>
+ <div class="submit">
+ <input type="submit" value="Apply">
+ </div>
+</form>
