@@ -36,18 +36,20 @@ else {
 $form = [];
 
 foreach ($fields as $index => $field) {
+
   $required = !empty($field->required) ? $field->required : FALSE;
   $label = !empty($field->label) ? $field->label : '';
   $elements = !empty($field->fields) ? $field->fields : [];
   $type = !empty($field->type) ? $field->type : '';
   $eeoc_description = !empty($field->description) ? $field->description : '';
-  if ($type == 'eeoc') {
-   if (!empty($field->questions)) {
 
-   $form['desciption_' . $index] = [
-     'type'  => 'markup',
-     'value' => $eeoc_description,
-   ];
+  if ($type == 'eeoc') {
+    if (!empty($field->questions)) {
+
+      $form['desciption_' . $index] = [
+        'type'  => 'markup',
+        'value' => $eeoc_description,
+      ];
 
       foreach ($field->questions as $eeoc_field) {
         $required = !empty($eeoc_field->required) ? $eeoc_field->required : FALSE;
@@ -220,6 +222,6 @@ $greenhouse->submitApplication($post_data);
     </div>
  <?php endforeach; ?>
  <div class="submit">
- <input type="submit" value="Apply">
+ <input type="submit" name="apply" value="Apply">
  </div>
 </form>
