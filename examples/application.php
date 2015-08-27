@@ -185,30 +185,37 @@ foreach ($fields as $index => $field) {
 $greenhouse->submitApplication($post_data);
 
 ?>
+<!-- Custom Application form builder example -->
 <form method="post" enctype="multipart/form-data">
  <?php foreach ($form as $element) : ?>
     <div class="form-item">
      <label><?php echo $element['label']; ?></label>
      <div class="element">
+
         <?php if ($element['type'] == 'text' || $element['type'] == 'file') : ?>
           <input type="<?php print $element['type']; ?>" name="<?php print $element['name']; ?>">
+
         <?php elseif ($element['type'] == 'select') : ?>
           <select name="<?php print $element['name']; ?>">
            <?php foreach ($element['options'] as $key => $val) : ?>
              <option value="<?php print $key; ?>"><?php print $val; ?></option>
             <?php endforeach; ?>
           </select>
+
         <?php elseif ($element['type'] == 'checkboxes') : ?>
          <?php foreach ($element['options'] as $key => $val) : ?>
            <div class="checkbox-item"><input type="checkbox" name="<?php print $element['name']; ?>" value="<?php print $key; ?>"><?php print $val; ?></div>
           <?php endforeach; ?>
+
         <?php elseif ($element['type'] == 'textarea') : ?>
           <textarea name="<?php print $element['name']; ?>"></textarea>
+
         <?php elseif ($element['type'] == 'markup') : ?>
           <div class="markup">
            <?php print $element['value']; ?>
           </div>
         <?php endif; ?>
+
      </div>
     </div>
  <?php endforeach; ?>
