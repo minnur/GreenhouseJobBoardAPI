@@ -16,8 +16,6 @@ $api_key = 'Greenhouse API Key'; // required to post application forms.
 
 $greenhouse = new GreenhouseJobBoardAPI($api_url, $api_key);
 
-$post_data = [];
-
 // Get job application fields by setting second argument to `true`.
 $job = $greenhouse->getJob([JOB_ID], true);
 
@@ -184,7 +182,24 @@ foreach ($fields as $index => $field) {
   }
 }
 
-$greenhouse->submitApplication($post_data);
+if (isset($_POST['apply'])) {
+
+  $post_data = [];
+  $post_data['id'] = [JOB_ID];
+  foreach ($form as $element) {
+  	if ($element['type'] != 'file' && $element['type'] != 'markup') {
+      $post_data[$element['name']] = $_POST[$element['name']];
+    }
+    else {
+    	// Implement you own file upload logic,
+    	// make sure to pass full path to uploaded files (Resume/Cover Letter).
+      $post_data[$element['name']] = ''; // Path to a file.
+    }
+  }
+
+  $response = $greenhouse->submitApplication($post_data);
+
+}
 
 ?>
 <!-- Custom Application form builder example -->

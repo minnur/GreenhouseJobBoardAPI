@@ -64,7 +64,7 @@ interface InterfaceGreenhouseJobBoardAPI {
   /**
    * Send request to Greenhouse API.
    */
-  public function request($method, $endpoint, Array $params = []);
+  public function request($method, $endpoint, $data);
 
   /**
    * Post request to Greenhouse API (Submit application form).
@@ -318,9 +318,9 @@ class GreenhouseJobBoardAPI implements InterfaceGreenhouseJobBoardAPI {
   /**
    * Send request to Greenhouse API.
    */
-  public function request($method, $endpoint, Array $params = []) {
+  public function request($method, $endpoint, $data) {
     try {
-      $response = $this->client->{$method}($endpoint, $params);
+      $response = $this->client->{$method}($endpoint, $data);
     }
     catch (\Exception $e) {
       echo 'Caught exception: ' .  $e->getMessage() . "\n";
