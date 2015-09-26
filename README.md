@@ -80,5 +80,6 @@ See also `examples/example.php` for working examples.
 method already exists, need to provide examples.
 
 ```php
-@todo
+@todo Add examples
+@see examples/application.php
 ```
