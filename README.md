@@ -1,6 +1,6 @@
 # Greenhouse Job Board API integration
 
-[![Travis CI build status](https://travis-ci.org/minnur/GreenhouseJobBoardAPI?branch=master)](https://travis-ci.org/minnur/GreenhouseJobBoardAPI)
+[![Travis CI build status](https://travis-ci.org/minnur/GreenhouseJobBoardAPI.svg?branch=master)](https://travis-ci.org/minnur/GreenhouseJobBoardAPI)
 
 Easy access to a simple JSON representation of your company's offices, departments, and published jobs. You can build careers pages with a unique look and feel, construct department-level pages, and more!
 
