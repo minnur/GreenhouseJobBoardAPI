@@ -5,5 +5,15 @@
     "require": {
         "php": ">=5.4.0",
         "php-curl-class/php-curl-class": "^4.6"
+    },
+    "require-dev": {
+        "mikey179/vfsStream": "1.5.*",
+        "phpunit/phpunit": "4.7.*",
+        "phpdocumentor/phpdocumentor": "~2.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "GreenhouseJobBoardAPI\\": "src/"
+        }
     }
 }
